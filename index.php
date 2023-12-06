@@ -1,0 +1,65 @@
+<?php
+
+require_once('conexao.php');
+
+$results = $conn->query('select * from metas')->fetchAll();
+
+$arraySituacao = [1 => 'Aberta', 2 => 'Em andamento', 3 => 'Realizada'];
+
+include_once('./layout/_header.php');
+
+?>
+
+<div class="card mt-4">
+    <!--Lembrando o Uso do d-flex e justify-content- between posiciona o botão ao final da minhas metas-->
+    <div class="card-header d-flex justify-content-between align-items-center bg-warning">
+        <h5 class="text-primary">Metas Test</h5>
+        <a class="btn btn-success" href="cadastro.php">+Adicionar</a>
+
+    </div>
+    <div class="card-body">
+        <table class="table table-striped  table-dark">
+            <thead>
+                <tr>
+                    <th>Descrição</th>
+                    <th>Situação</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <!--tbody é onde vamos ter os resgitros percorrendo pelos $results-->
+            <tbody>
+                <!--foreach é o laço de repetição -->
+                <!--Lembrando abrir em foreach e fechar em endforeach o laço de repetição-->
+                <?php foreach ($results as $item) : ?>
+                    <tr>
+                        <td><?= $item['descricao'] ?></td>
+                        <!--area do array que altera a situação de número para texto, para que apareça no browser-->
+                        <td><?= $arraySituacao[$item['situacao']]?></td>
+                        <td>
+                            <!--sm relaciona o tamanho do botão!!-->
+                            <!--query param =$item['id] junto ao cadastro.php?id-->
+                            <a class="btn btn-sm btn-primary" href="cadastro.php?id=<?= $item['id'] ?>">Editar</a>
+                            <button class="btn btn-sm btn-danger">Excluir</button>
+
+
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<?php include_once('./layout/_footer.php'); ?>
