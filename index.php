@@ -2,6 +2,20 @@
 
 require_once('conexao.php');
 
+
+//area de excluir ao clicar no botao excluir
+if(isset($_GET['excluir'])) {
+    $id = filter_input(INPUT_GET, 'excluir', FILTER_SANITIZE_NUMBER_INT);
+
+    if ($id)
+    $conn->exec('DELETE FROM metas WHERE id=' . $id);
+
+
+    header('Location: index.php');
+    exit;
+}
+
+
 $results = $conn->query('select * from metas')->fetchAll();
 
 $arraySituacao = [1 => 'Aberta', 2 => 'Em andamento', 3 => 'Realizada'];
@@ -34,12 +48,12 @@ include_once('./layout/_header.php');
                     <tr>
                         <td><?= $item['descricao'] ?></td>
                         <!--area do array que altera a situação de número para texto, para que apareça no browser-->
-                        <td><?= $arraySituacao[$item['situacao']]?></td>
+                        <td><?= $arraySituacao[$item['situacao']] ?></td>
                         <td>
                             <!--sm relaciona o tamanho do botão!!-->
                             <!--query param =$item['id] junto ao cadastro.php?id-->
                             <a class="btn btn-sm btn-primary" href="cadastro.php?id=<?= $item['id'] ?>">Editar</a>
-                            <button class="btn btn-sm btn-danger">Excluir</button>
+                            <button class="btn btn-sm btn-danger" onclick="excluir(<?= $item['id'] ?>)">Excluir</button>
 
 
                         </td>
@@ -50,12 +64,13 @@ include_once('./layout/_header.php');
 
     </div>
 </div>
-
-
-
-
-
-
+<script>
+    function excluir(id) {
+        if (confirm("Deseja excluir esta meta?")) {
+       window.location.href = "index.php?excluir=" + id;
+            }
+    }
+</script>
 
 
 
